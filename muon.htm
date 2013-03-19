@@ -2,10 +2,11 @@
 <html>
 	<head>
 		<title>Muon Redux</title>
-		<link href="http://portal.azurepackage.me/bootstrap.min.css" rel="stylesheet">
-		<link href="http://portal.azurepackage.me/bootstrap-responsive.css" rel="stylesheet">
+		<link href="//richorama.blob.core.windows.net/bootstrap.min.css" rel="stylesheet">
+		<link href="//richorama.blob.core.windows.net/bootstrap-responsive.css" rel="stylesheet">
+		<script src="//richorama.blob.core.windows.net/muonredux.js"></script>
 
-		<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+		<!--script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 		<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
 		<script src="https://raw.github.com/makeusabrew/bootbox/v3.0.0/bootbox.min.js"></script>
 		<script src="http://jquery-xml2json-plugin.googlecode.com/svn/trunk/jquery.xml2json.js"></script>
@@ -14,7 +15,7 @@
 	    <script src="http://documentcloud.github.com/underscore/underscore.js"></script>
       	<script src="http://documentcloud.github.com/backbone/backbone.js"></script>
 		<script src="http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.9.1/dropbox.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.9.1/dropbox.min.js"></script-->
 
 	
 		<style type="text/css" media="screen">
@@ -64,8 +65,6 @@ var converter = new Showdown.converter();
 var user;
 var currentData;
 var canEdit = true;
-var authservice;
-var retrycount = 0;
 var client;
 
 $(document).ready(function() {
@@ -203,7 +202,6 @@ var AppRouter = Backbone.Router.extend({
 		$("#mdhelp").hide();
 		render("snapshot-template", {page:page, snapshot:snapshot});
 
-		retrycount = 0;
 		getWithRetry("/wiki/" + page + "?" + sas + "&snapshot=" + snapshot, function(data){
 			currentData = data;
 	  		var md = converter.makeHtml(data);
@@ -218,7 +216,6 @@ var AppRouter = Backbone.Router.extend({
 			return;
 		}
 
-		retrycount = 0;
 		client.readFile(page, function(error, data) {
 			render("editor-template", {data:data, page:page});
 			currentData = data;
