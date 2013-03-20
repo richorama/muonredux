@@ -1,6 +1,6 @@
 # Muon Redux
 
-The wiki built on [Dropbox](http://db.tt/osZLMW0)
+The markdown wiki built on [Dropbox](http://db.tt/osZLMW0)
 
 ### Installation
 
