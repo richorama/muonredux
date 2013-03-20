@@ -4,12 +4,12 @@ The wiki built on [Dropbox](http://db.tt/osZLMW0)
 
 ### Installation
 
-1. Download this file [muon.htm](https://raw.github.com/richorama/muonredux/master/muon.htm) and save it in your public
-dropbox folder.
+Download the files in this repository and place them on a web server.
 
-1. Right click on the file, and select `Copy public link`.
+[Site44](http://www.site44.com/) does a good job of this.
 
-1. Open the link in the browser.
+Alternatively you can use the hosted version [https://muon.site44.com](https://muon.site44.com/).
+
 
 ### Using the Wiki
 
