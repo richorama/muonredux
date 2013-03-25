@@ -177,6 +177,9 @@ function switchPanel(panel){
   		var md = converter.makeHtml(editor.getValue());
   		$("#preview-panel").html(md);
 	}
+	if (panel == "edit"){
+		editor.resize();
+	}
 }
 
 var editor;
