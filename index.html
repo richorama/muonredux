@@ -393,7 +393,7 @@ function Hello(){
 
 		<script id="new-template" type="text/x-handlebars-template">
 
-            {{#if canEdit}}
+       
 		    <div class="row-fluid toolbar">
                 <div class="toolbar-buttons"><a class="btn btn-primary" href="javascript:void(0);" onclick="save('{{page}}');">Create</a> <a href="javascript:void(0);" onclick="window.history.back()" class="btn">Cancel</a>
 		    	<strong>Create {{page}}</strong></div>
@@ -403,11 +403,52 @@ function Hello(){
 				{{/if}}
             </div>
             <div class="row-fluid">
+            	<div class="navbar">
+            	<ul class="nav nav-pills">
+					<li id="edit-link" class="panel-link active"><a onclick="switchPanel('edit');" href="javascript:void(0);">Edit</a></li>
+					<li id="preview-link" class="panel-link"><a onclick="switchPanel('preview');" href="javascript:void(0);">Preview</a></li>
+					<li id="help-link" class="panel-link"><a onclick="switchPanel('help');" href="javascript:void(0);">Help</a></li>
+				</ul>
+				</div>
+            </div>
+            <div class="row-fluid panel" id="edit-panel">
 				<div class="ace_editor_wrapper"><div id="editor">{{data}}</div></div>
 			</div>
-			{{else}}
-				<div class="row-fluid toolbar">This page does not exist.</div>
-            {{/if}}
+			<div class="row-fluid panel" id="preview-panel" style="display:none">
+
+			</div>
+			<div class="row-fluid panel" id="help-panel" style="display:none">
+							<h2>Help with Markdown</h2>
+			<strong>Links</strong>
+			
+<pre>To link to another page in the Wiki:
+[A Link](#ALink)
+ 
+To link to an external page:
+[Two10 Website](http://www.two10degrees.com) 
+</pre>
+
+			<strong>Formatting</strong>
+
+<pre># Main Heading
+## Sub Heading
+
+* Bullet
+* Points
+
+1. Numbered 
+1. List
+</pre>
+
+			<strong>Source Code</strong>
+<pre>```js
+function Hello(){
+	console.log("World");
+}
+```</pre>
+			</div>
+
+		</script>
 
 		</script>
 
