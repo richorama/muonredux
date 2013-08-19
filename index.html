@@ -197,8 +197,11 @@ var AppRouter = Backbone.Router.extend({
 		window.location = document.URL.split('?')[0];
 	},
 	home: function(){
-  		client.readdir("/", function(error, entries) {
-  			render("page-template", {pages:entries});
+  		client.readdir("/", function(error, entries, _, raw) {
+  			raw.sort(function(a,b){
+  				return b._json.revision - a._json.revision;
+  			});
+  			render("page-template", {pages:raw});
   		});
   		
 	},
@@ -310,7 +313,7 @@ var app_router = new AppRouter;
                 <h2>All pages in this Wiki</h2>
 			  	<ul>
 				  {{#each pages}}
-				  	<li><a href="#page/{{this}}">{{this}}</a></li>
+				  	<li><a href="#page/{{name}}">{{name}}</a></li>
 				  {{/each}}
 			  	</ul>
 		  	</div>
