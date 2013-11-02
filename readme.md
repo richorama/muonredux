@@ -22,9 +22,9 @@ Anything you add or update in this folder will automatically be synced up to Muo
 ### Acknowledgements
 
 * [Dropbox-js](https://github.com/dropbox/dropbox-js)
-* [Bootbox.js](http://bootboxjs.com/)
 * [Ace](http://ace.ajax.org/)
 * [Showdown](https://github.com/coreyti/showdown)
+* [Twitter Bootstrap](http://getbootstrap.com/)
 
 ### License 
 
