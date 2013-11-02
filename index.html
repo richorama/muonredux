@@ -2,8 +2,7 @@
 <html>
 	<head>
 		<title>Muon Redux</title>
-		<link href="bootstrap.min.css" rel="stylesheet">
-		<link href="bootstrap-responsive.css" rel="stylesheet">
+		<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
 		<script src="muonredux.js"></script>
 
 		<!--script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
@@ -44,20 +43,9 @@
 				font-size:26px;
 			}
 			.name{
-				float:right;
-				margin-right: 10px;
-				margin-top: 10px;
+				margin-top: 15px;
 			}
-			.navbar .nav>.active>a{
-				color:gray; 
-			}
-			.navbar .nav>li>a{
-				color:gray; 
-				text-shadow:none;
-			}
-			.active{
-				border-bottom: solid 4px #5192fb;
-			}
+	
 
 		</style>      	
 	</head>
@@ -105,6 +93,18 @@ $(document).ready(function() {
 			Backbone.history.start();
 		});
 	});
+
+	$("#newPageModalOK").click(function(){
+		var val = $("#newPageName").val();
+		if (!val){
+			return;
+		}
+		$("#newPageModal").modal("hide");
+		$("#newPageName").val("");
+		app_router.new(val);	
+	});
+	
+
 });
 
 function render(template, data){
@@ -161,11 +161,7 @@ function deletePage(page, cb){
 }
 
 function newPage(){
-	bootbox.prompt("Please enter a name for the page", function(result) {                
-		if (result) {                                             
-			app_router.new(result);
-		}
-	});
+	$("#newPageModal").modal('show')
 }
 
 function switchPanel(panel){
@@ -186,11 +182,12 @@ var editor;
 var AppRouter = Backbone.Router.extend({
 	routes: {
 		"?_dropboxjs_scope=*foo":"redirect",
-		"page/:page": "page",
-		"edit/:page": "edit",
-		"snapshot/:snapshot/:page": "snapshot",
-		"history/:page": "history",
+		"page/*page": "page",
+		"edit/*page": "edit",
+		"snapshot/:snapshot/*page": "snapshot",
+		"history/*page": "history",
 		"" : "home",
+		"folder/*folder": "folder",
 		"*page" : "page"
 	},
 	redirect: function(){
@@ -198,6 +195,7 @@ var AppRouter = Backbone.Router.extend({
 	},
 	home: function(){
   		client.readdir("/", function(error, entries, _, raw) {
+  			console.log(raw);
   			raw.sort(function(a,b){
   				return b._json.revision - a._json.revision;
   			});
@@ -264,6 +262,15 @@ var AppRouter = Backbone.Router.extend({
 		client.revisions(page, function(error, data){
 			render("history-template", {versions:data, page:page});
 		});
+	},
+	folder: function(folder){
+		client.readdir("/" + folder, function(error, entries, _, raw) {
+  			console.log(raw);
+  			raw.sort(function(a,b){
+  				return b._json.revision - a._json.revision;
+  			});
+  			render("page-template", {pages:raw, folder:folder});
+  		});
 	}
 });
 
@@ -272,20 +279,20 @@ var app_router = new AppRouter;
 
 		</script>
 		
-		<div class="container-fluid">
+		<div class="container">
 			<div id="container"></div>
 		</div>
 		
 
 		<script id="splash-template" type="text/x-handlebars-template">
-            <div class="hero-unit">
+            <div class="jumbotron">
 				<h1>Welcome to Muon Redux</h1>
 				<p>The wiki built on <a href="http://db.tt/osZLMW0">Dropbox</a>.</p>
 			</div>
 		</script>
 
 		<script id="hero-template" type="text/x-handlebars-template">
-            <div class="hero-unit">
+            <div class="jumbotron">
 				<h1>Welcome to Muon Redux</h1>
 				<p>The wiki built on <a href="http://db.tt/osZLMW0">Dropbox</a>.</p>
 				{{#if message}}
@@ -296,40 +303,50 @@ var app_router = new AppRouter;
 		</script>
 
 		<script id="page-template" type="text/x-handlebars-template">
-            <div class="row-fluid toolbar">
-                <div class="toolbar-buttons">
+            <div class="navbar navbar-default">
+                <div class="navbar-form navbar-left">
                 	<strong>Muon Redux</strong>
                 	{{#if canEdit}}
-                		<a href="javascript:void(0);" onclick="newPage();" class="btn">New Page</a>
+                		<a href="javascript:void(0);" onclick="newPage();" class="btn btn-default">New Page</a>
                 	{{/if}}
                 </div>
 
                 {{#if user}}
-					<span class="name">{{user.name}}</span>
+					<div class="navbar-form navbar-right name">{{user.name}}</div>
 				{{/if}}
                 
             </div>
             <div class="row-fluid">
-                <h2>All pages in this Wiki</h2>
+            	{{#if folder}}
+	            	<h2>All pages in {{folder}}</h2>
+	            	<a href="#">&larr; Show all</a><br/><br/>
+            	{{else}}
+                	<h2>All pages in this Wiki</h2>
+                {{/if}}
 			  	<ul>
 				  {{#each pages}}
-				  	<li><a href="#page/{{name}}">{{name}}</a></li>
+				  	{{#if isFile}}
+				  		<li><a href="#page{{path}}">{{name}}</a></li>
+				  	{{/if}}
+				  	{{#if isFolder}}
+				  		<li><a href="#folder/{{name}}">[{{name}}]</a></li>
+				  	{{/if}}
 				  {{/each}}
 			  	</ul>
 		  	</div>
 		</script>
 
 		<script id="markdown-template" type="text/x-handlebars-template">
-            <div class="row-fluid toolbar">
-                <div class="toolbar-buttons"><a href="#" class="btn btn-primary">All Pages</a> 
+            <div class="navbar navbar-default">
+                <div class="navbar-form navbar-left"><a href="#" class="btn btn-primary">All Pages</a> 
                 {{#if canEdit}}
-                	<a href="#edit/{{page}}" class="btn">Edit</a>
-                	<a href="javascript:void(0);" onclick="newPage();" class="btn">New Page</a>
+                	<a href="#edit/{{page}}" class="btn btn-default">Edit</a>
+                	<a href="javascript:void(0);" onclick="newPage();" class="btn btn-default">New Page</a>
                 {{/if}}
-                <!--a href="#history/{{page}}" class="btn">History</a-->
+                <!--a href="#history/{{page}}" class="btn btn-default">History</a-->
 		    	<strong>{{page}}</strong></div>
                 {{#if user}}
-					<span class="name">{{user.name}}</span>
+					<div class="navbar-form navbar-right name">{{user.name}}</div>
 				{{/if}}
 
             </div>		
@@ -338,12 +355,12 @@ var app_router = new AppRouter;
 		</script>
 
 		<script id="editor-template" type="text/x-handlebars-template">
-		    <div class="row-fluid toolbar">
-                <div class="toolbar-buttons"><a class="btn btn-primary" href="javascript:void(0);" onclick="save('{{page}}');">Save</a> <a href="#page/{{page}}" class="btn">Cancel</a> <a href="javascript:void(0);" onclick="deletePage('{{page}}');" class="btn btn-danger">Delete</a>
+            <div class="navbar navbar-default">
+                <div class="navbar-form navbar-left"><a class="btn btn-primary" href="javascript:void(0);" onclick="save('{{page}}');">Save</a> <a href="#page/{{page}}" class="btn btn-default">Cancel</a> <a href="javascript:void(0);" onclick="deletePage('{{page}}');" class="btn btn-danger">Delete</a>
 		    	<strong>Edit {{page}}</strong></div>
 
                 {{#if user}}
-					<span class="name">{{user.name}}</span>
+					<div class="navbar-form navbar-right name">{{user.name}}</div>
 				{{/if}}
             </div>
             <div class="row-fluid">
@@ -397,12 +414,12 @@ function Hello(){
 		<script id="new-template" type="text/x-handlebars-template">
 
        
-		    <div class="row-fluid toolbar">
-                <div class="toolbar-buttons"><a class="btn btn-primary" href="javascript:void(0);" onclick="save('{{page}}');">Create</a> <a href="javascript:void(0);" onclick="window.history.back()" class="btn">Cancel</a>
+            <div class="navbar navbar-default">
+                <div class="navbar-form navbar-left"><a class="btn btn-primary" href="javascript:void(0);" onclick="save('{{page}}');">Create</a> <a href="javascript:void(0);" onclick="window.history.back()" class="btn btn-default">Cancel</a>
 		    	<strong>Create {{page}}</strong></div>
 
                 {{#if user}}
-					<span class="name">{{user.name}}</span>
+					<div class="navbar-form navbar-right name">{{user.name}}</div>
 				{{/if}}
             </div>
             <div class="row-fluid">
@@ -456,10 +473,10 @@ function Hello(){
 		</script>
 
 		<script id="history-template" type="text/x-handlebars-template">
-            <div class="row-fluid toolbar">
-                <div class="toolbar-buttons"><a href="#" class="btn btn-primary">All Pages</a></div>
+            <div class="navbar navbar-default">
+                <div class="navbar-form navbar-left"><a href="#" class="btn btn-primary">All Pages</a></div>
                 {{#if user}}
-					<span class="name">{{user.name}}</span>
+					<div class="navbar-form navbar-right name">{{user.name}}</div>
 				{{/if}}
 
             </div>
@@ -480,48 +497,59 @@ function Hello(){
 		</script>
 
 		<script id="snapshot-template" type="text/x-handlebars-template">
-            <div class="row-fluid toolbar">
-                <div class="toolbar-buttons"><a href="#" class="btn btn-primary">All Pages</a> 
+            <div class="navbar navbar-default">
+                <div class="navbar-form navbar-left"><a href="#" class="btn btn-primary">All Pages</a> 
                 <a href="#page/{{page}}" class="btn btn-primary">Current Version</a> 
-                <a href="#history/{{page}}" class="btn">History</a>
+                <a href="#history/{{page}}" class="btn btn-default">History</a>
                 {{#if canEdit}}
                 	<a href="javascript:void(0);" onclick="promote('{{page}}');" class="btn btn-danger">Promote to current version</a> 
                 {{/if}}
 		    	<strong>Historical version of {{page}}</strong></div>
 
                 {{#if user}}
-					<span class="name">{{user.name}}</span>
+					<div class="navbar-form navbar-right name">{{user.name}}</div>
 				{{/if}}
             </div>		
 			<div class="row-fluid" id="md-container">
 			</div>
 		</script>
 
+		<div class="modal fade" id="newPageModal">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title">Please enter a name for the page</h4>
+		      </div>
+		      <div class="modal-body">
+		        
+				<label class="sr-only" for="exampleInputEmail2">Page Name</label>
+    			<input type="text" class="form-control" id="newPageName">
+
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn btn-primary" id="newPageModalOK">OK</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
 		<script id="nopermission-template" type="text/x-handlebars-template">
 
-  			<div class="row-fluid toolbar">
-                <div class="toolbar-buttons"><strong>Muon Redux</strong></div>
+            <div class="navbar navbar-default">
+                <div class="navbar-form navbar-left"><strong>Muon Redux</strong></div>
 
                 {{#if user}}
-					<span class="name">{{user.name}}</span>
+					<div class="navbar-form navbar-right name">{{user.name}}</div>
 				{{/if}}
             </div>
             <div class="row-fluid">
 				<p style="color:red">Sorry, you don't have permission to do this.</p>
 		  	</div>		
 		</script>
-<script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-39510686-1']);
-  _gaq.push(['_trackPageview']);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
 
-</script>
 	</body>
 </html>
