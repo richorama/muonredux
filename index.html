@@ -48,6 +48,9 @@
 			.glyphicon{
 				padding-right:20px;
 			}
+			.silver{
+				color:silver;
+			}
 	
 
 		</style>      	
@@ -329,10 +332,10 @@ var app_router = new AppRouter;
 			  	<ul class="list-unstyled">
 				  {{#each pages}}
 				  	{{#if isFile}}
-				  		<li><i class="glyphicon glyphicon-file"></i><a href="#page{{path}}">{{name}}</a></li>
+				  		<li><i class="silver glyphicon glyphicon-file"></i><a href="#page{{path}}">{{name}}</a></li>
 				  	{{/if}}
 				  	{{#if isFolder}}
-				  		<li><i class="glyphicon glyphicon-folder-open"></i><a href="#folder/{{name}}">[{{name}}]</a></li>
+				  		<li><i class="silver glyphicon glyphicon-folder-open"></i><a href="#folder/{{name}}">[{{name}}]</a></li>
 				  	{{/if}}
 				  {{/each}}
 			  	</ul>
