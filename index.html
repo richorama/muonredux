@@ -51,6 +51,9 @@
 			.silver{
 				color:silver;
 			}
+			body{
+				margin-top: 60px;
+			}
 	
 
 		</style>      	
@@ -309,7 +312,7 @@ var app_router = new AppRouter;
 		</script>
 
 		<script id="page-template" type="text/x-handlebars-template">
-            <div class="navbar navbar-default">
+            <div class="navbar navbar-default navbar-fixed-top">
                 <div class="navbar-form navbar-left">
                 	<strong>Muon Redux</strong>
                 	{{#if canEdit}}
@@ -343,7 +346,7 @@ var app_router = new AppRouter;
 		</script>
 
 		<script id="markdown-template" type="text/x-handlebars-template">
-            <div class="navbar navbar-default">
+            <div class="navbar navbar-default navbar-fixed-top">
                 <div class="navbar-form navbar-left"><a href="#" class="btn btn-primary"><i class="glyphicon glyphicon-list"></i>All Pages</a> 
                 {{#if canEdit}}
                 	<a href="#edit/{{page}}" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i>Edit</a>
@@ -361,7 +364,7 @@ var app_router = new AppRouter;
 		</script>
 
 		<script id="editor-template" type="text/x-handlebars-template">
-            <div class="navbar navbar-default">
+            <div class="navbar navbar-default navbar-fixed-top">
                 <div class="navbar-form navbar-left"><a class="btn btn-primary" href="javascript:void(0);" onclick="save('{{page}}');"><i class="glyphicon glyphicon-floppy-disk"></i>Save</a> <a href="#page/{{page}}" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i>Cancel</a> <a href="javascript:void(0);" onclick="deletePage('{{page}}');" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i>Delete</a>
 		    	<strong>Edit {{page}}</strong></div>
 
@@ -420,8 +423,8 @@ function Hello(){
 		<script id="new-template" type="text/x-handlebars-template">
 
        
-            <div class="navbar navbar-default">
-                <div class="navbar-form navbar-left"><a class="btn btn-primary" href="javascript:void(0);" onclick="save('{{page}}');">Create</a> <a href="javascript:void(0);" onclick="window.history.back()" class="btn btn-default">Cancel</a>
+            <div class="navbar navbar-default navbar-fixed-top">
+                <div class="navbar-form navbar-left"><a class="btn btn-primary" href="javascript:void(0);" onclick="save('{{page}}');"><i class="glyphicon glyphicon-floppy-disk"></i>Create</a> <a href="javascript:void(0);" onclick="window.history.back()" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i>Cancel</a>
 		    	<strong>Create {{page}}</strong></div>
 
                 {{#if user}}
@@ -431,9 +434,9 @@ function Hello(){
             <div class="row-fluid">
             	<div class="navbar">
             	<ul class="nav nav-pills">
-					<li id="edit-link" class="panel-link active"><a onclick="switchPanel('edit');" href="javascript:void(0);">Edit</a></li>
-					<li id="preview-link" class="panel-link"><a onclick="switchPanel('preview');" href="javascript:void(0);">Preview</a></li>
-					<li id="help-link" class="panel-link"><a onclick="switchPanel('help');" href="javascript:void(0);">Help</a></li>
+					<li id="edit-link" class="panel-link active"><a onclick="switchPanel('edit');" href="javascript:void(0);"><i class="glyphicon glyphicon-pencil"></i>Edit</a></li>
+					<li id="preview-link" class="panel-link"><a onclick="switchPanel('preview');" href="javascript:void(0);"><i class="glyphicon glyphicon-eye-open"></i>Preview</a></li>
+					<li id="help-link" class="panel-link"><a onclick="switchPanel('help');" href="javascript:void(0);"><i class="glyphicon glyphicon-question-sign"></i>Help</a></li>
 				</ul>
 				</div>
             </div>
@@ -479,7 +482,7 @@ function Hello(){
 		</script>
 
 		<script id="history-template" type="text/x-handlebars-template">
-            <div class="navbar navbar-default">
+            <div class="navbar navbar-default navbar-fixed-top">
                 <div class="navbar-form navbar-left"><a href="#" class="btn btn-primary"><i class="glyphicon glyphicon-list"></i>All Pages</a></div>
                 {{#if user}}
 					<div class="navbar-form navbar-right name">{{user.name}}</div>
@@ -503,7 +506,7 @@ function Hello(){
 		</script>
 
 		<script id="snapshot-template" type="text/x-handlebars-template">
-            <div class="navbar navbar-default">
+            <div class="navbar navbar-default navbar-fixed-top">
                 <div class="navbar-form navbar-left"><a href="#" class="btn btn-primary"><i class="glyphicon glyphicon-list"></i>All Pages</a> 
                 <a href="#page/{{page}}" class="btn btn-primary">Current Version</a> 
                 <a href="#history/{{page}}" class="btn btn-default">History</a>
@@ -543,7 +546,7 @@ function Hello(){
 
 		<script id="nopermission-template" type="text/x-handlebars-template">
 
-            <div class="navbar navbar-default">
+            <div class="navbar navbar-default navbar-fixed-top">
                 <div class="navbar-form navbar-left"><strong>Muon Redux</strong></div>
 
                 {{#if user}}
