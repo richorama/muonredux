@@ -19,6 +19,15 @@ Muon will save wiki files as markdown in the `App/Muon Redux/` folder.
 
 Anything you add or update in this folder will automatically be synced up to Muon when you are online.
 
+### Development
+
+To update the dependencies, modify the `Gruntfile.js` and run these commands:
+
+```
+npm install
+grunt
+```
+
 ### Acknowledgements
 
 * [Dropbox-js](https://github.com/dropbox/dropbox-js)
