@@ -19,6 +19,13 @@ Muon will save wiki files as markdown in the `App/Muon Redux/` folder.
 
 Anything you add or update in this folder will automatically be synced up to Muon when you are online.
 
+JavaScript placed in code blocks will be executed by the browser, and the results written on the rendered page:
+
+    ```js
+    print("hello world");
+    2 + 3
+    ```
+
 ### Development
 
 To update the dependencies, modify the `Gruntfile.js` and run these commands:
