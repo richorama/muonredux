@@ -182,12 +182,57 @@ function switchPanel(panel){
 	$(".panel-link").removeClass('active');
 	$("#" + panel + "-link").addClass('active');	
 	if (panel == "preview"){
-  		var md = converter.makeHtml(editor.getValue());
+  		var md = converter.makeHtml(transform(editor.getValue()));
   		$("#preview-panel").html(md);
 	}
 	if (panel == "edit"){
 		editor.resize();
 	}
+}
+
+var printStatements = [];
+function print(message){
+	if (typeof message === "object"){
+		message = JSON.stringify(message, null, "  ");
+	}
+	printStatements.push(message);
+}
+function transform(md){
+	var output = [];
+	var lines = md.split("\n");
+	var inBlock = false;
+	var currentBlock = "";
+	lines.forEach(function(line){
+		output.push(line);
+		if (line.indexOf("```js")=== 0){
+			inBlock = true;
+		} else if (line === "```"){
+			if (inBlock && currentBlock){
+				var returnVal = eval(currentBlock);
+				if (typeof returnVal === "object"){
+					returnVal = JSON.stringify(returnVal, null, "  ");
+				}
+				if (returnVal != null){
+					output.push("_returns_");
+					output.push("```");
+					output.push(returnVal);
+					output.push("```");
+				}
+				if (printStatements.length){
+					output.push("_output_");
+					output.push("```");
+					printStatements.forEach(function(x){ output.push(x); });
+					output.push("```");
+				}
+			}
+			currentBlock = "";
+			printStatements = [];
+			inBlock = false;
+		} else if (inBlock){
+			currentBlock += line + "\n";
+		}
+	});
+	return output.join("\n");
 }
 
 var editor;
@@ -226,7 +271,7 @@ var AppRouter = Backbone.Router.extend({
 			}
 
 			currentData = data;
-	  		var md = converter.makeHtml(data);
+	  		var md = converter.makeHtml(transform(data));
 	  		$("#md-container").html(md);
 
 		});
@@ -236,7 +281,7 @@ var AppRouter = Backbone.Router.extend({
 
 		getWithRetry("/wiki/" + page + "?" + sas + "&snapshot=" + snapshot, function(data){
 			currentData = data;
-	  		var md = converter.makeHtml(data);
+	  		var md = converter.makeHtml(transform(data));
 	  		$("#md-container").html(md);
 	  	}, function(){
 	  		app_router.new(page);
