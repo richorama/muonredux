@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 				'http://code.jquery.com/jquery-1.8.3.min.js',
 				'https://raw.github.com/twbs/bootstrap/master/js/modal.js',
 				'http://cloud.github.com/downloads/wycats/handlebars.js/handlebars-1.0.rc.1.js',
-				'https://raw.github.com/coreyti/showdown/master/src/showdown.js',
+				'https://raw.githubusercontent.com/showdownjs/showdown/master/dist/showdown.js',
 				'http://documentcloud.github.com/underscore/underscore.js',
 				'http://documentcloud.github.com/backbone/backbone.js',
 				'http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js',
