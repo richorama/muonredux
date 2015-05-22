@@ -6,9 +6,7 @@ The markdown wiki built on [Dropbox](http://db.tt/osZLMW0)
 
 Download the files in this repository and place them on a web server.
 
-[Site44](http://www.site44.com/) does a good job of this.
-
-Alternatively you can use the hosted version [https://muon.site44.com](https://muon.site44.com/).
+Alternatively you can use gihub pages: [https://richorama.github.io/muonredux/](https://richorama.github.io/muonredux/).
 
 
 ### Using the Wiki
