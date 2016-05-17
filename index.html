@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>Muon Redux</title>
-		<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 		<script src="muonredux.js"></script>
 
 		<!--script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
@@ -16,9 +16,9 @@
 		<script src="http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.9.1/dropbox.min.js"></script-->
 
-	
+
 		<style type="text/css" media="screen">
-		    #editor { 
+		    #editor {
 		        position: absolute;
 		        top: 0;
 		        right: 0;
@@ -32,11 +32,11 @@
 				border-radius: 4px;
 				border-bottom-right-radius: 0px;
 				margin-top: 5px;
-			}	
+			}
 			.toolbar {
 				background:whitesmoke;
 				margin-bottom:10px;
-			}	    
+			}
 			.toolbar-buttons{
 				float:left;
 				padding:9px;
@@ -46,7 +46,7 @@
 				margin-top: 15px;
 			}
 			.glyphicon{
-				padding-right:20px;
+				padding-right:10px;
 			}
 			.silver{
 				color:silver;
@@ -57,15 +57,15 @@
 			.navbar-default{
 				opacity: 0.9;
 			}
-	
 
-		</style>      	
+
+		</style>
 	</head>
 	<body>
 		<script>
 /*
- _ __ ___  _   _  ___  _ __  
-| '_ ` _ \| | | |/ _ \| '_ \ 
+ _ __ ___  _   _  ___  _ __
+| '_ ` _ \| | | |/ _ \| '_ \
 | | | | | | |_| | (_) | | | |
 |_| |_| |_|\__,_|\___/|_| |_|
 
@@ -113,9 +113,9 @@ $(document).ready(function() {
 		}
 		$("#newPageModal").modal("hide");
 		$("#newPageName").val("");
-		app_router.new(val);	
+		app_router.new(val);
 	});
-	
+
 
 });
 
@@ -156,19 +156,19 @@ function save(page){
 	var content = editor.getValue();
 	uploadContent(page, content, function(){
 		//snapshot("/wiki/" + page, function(){});
-		Backbone.history.navigate("page/" + page, true); 			
+		Backbone.history.navigate("page/" + page, true);
 	});
 }
 
 function promote(page){
 	uploadContent(page, currentData, function(){
-		Backbone.history.navigate("page/" + page, true); 			
+		Backbone.history.navigate("page/" + page, true);
 	});
 }
 
 function deletePage(page, cb){
 	client.delete(page, function(){
-		Backbone.history.navigate("/", true); 	
+		Backbone.history.navigate("/", true);
 	})
 }
 
@@ -177,13 +177,13 @@ function newPage(){
 }
 
 function switchPanel(panel){
-	$(".panel").hide();
+	$(".displaypanel").hide();
 	$("#" + panel + "-panel").show();
 	$(".panel-link").removeClass('active');
-	$("#" + panel + "-link").addClass('active');	
+	$("#" + panel + "-link").addClass('active');
 	if (panel == "preview"){
   		var md = converter.makeHtml(transform(editor.getValue()));
-  		$("#preview-panel").html(md);
+  		$("#preview-panel-content").html(md);
 	}
 	if (panel == "edit"){
 		editor.resize();
@@ -258,7 +258,7 @@ var AppRouter = Backbone.Router.extend({
   			});
   			render("page-template", {pages:raw});
   		});
-  		
+
 	},
 	page: function(page){
 		render("markdown-template", {page:page});
@@ -286,7 +286,7 @@ var AppRouter = Backbone.Router.extend({
 	  	}, function(){
 	  		app_router.new(page);
 	  	});
-	},	
+	},
 	edit: function(page){
 		if (user && !canEdit){
 			render("nopermission-template", {});
@@ -335,11 +335,11 @@ var app_router = new AppRouter;
 
 
 		</script>
-		
+
 		<div class="container">
 			<div id="container"></div>
 		</div>
-		
+
 
 		<script id="splash-template" type="text/x-handlebars-template">
             <div class="jumbotron">
@@ -355,7 +355,7 @@ var app_router = new AppRouter;
 				{{#if message}}
 					<div style="color:red">{{message}}</div>
 				{{/if}}
-				
+
 			</div>
 		</script>
 
@@ -381,23 +381,23 @@ var app_router = new AppRouter;
             	{{else}}
                 	<h2>All pages in this Wiki</h2>
                 {{/if}}
-			  	<ul class="list-unstyled">
+			  	<div class="list-group">
 				  {{#each pages}}
 				  	{{#if isFile}}
-				  		<li><i class="silver glyphicon glyphicon-file"></i><a href="#page{{path}}">{{name}}</a></li>
+				  		<a class="list-group-item" href="#page{{path}}"><i class="silver glyphicon glyphicon-file"></i> {{name}}</a>
 				  	{{/if}}
 				  	{{#if isFolder}}
-				  		<li><i class="silver glyphicon glyphicon-folder-open"></i><a href="#folder/{{name}}">[{{name}}]</a></li>
+				  		<a class="list-group-item list-group-item-warning" href="#folder/{{name}}"><i class="silver glyphicon glyphicon-folder-open"></i> {{name}}</a>
 				  	{{/if}}
 				  {{/each}}
-			  	</ul>
+			  </div>
 		  	</div>
 		</script>
 
 		<script id="markdown-template" type="text/x-handlebars-template">
             <div class="navbar navbar-default navbar-fixed-top">
             	<div class="container">
-                <div class="navbar-form navbar-left"><a href="#" class="btn btn-primary"><i class="glyphicon glyphicon-list"></i>All Pages</a> 
+                <div class="navbar-form navbar-left"><a href="#" class="btn btn-primary"><i class="glyphicon glyphicon-list"></i>All Pages</a>
                 {{#if canEdit}}
                 	<a href="#edit/{{page}}" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i>Edit</a>
                 	<a href="javascript:void(0);" onclick="newPage();" class="btn btn-default"><i class="glyphicon glyphicon-file"></i>New Page</a>
@@ -408,10 +408,17 @@ var app_router = new AppRouter;
 					<div class="navbar-form navbar-right name">{{user.name}}</div>
 				{{/if}}
 
-            </div>		
             </div>
-			<div class="row-fluid" id="md-container">
-			</div>
+            </div>
+			<div class="row-fluid">
+				<div class="panel panel-default">
+					<div class="panel-body" id="md-container">
+						<span class="label label-default">Loading...</span>
+					</div>
+				</div>
+		  	</div>
+
+
 		</script>
 
 		<script id="editor-template" type="text/x-handlebars-template">
@@ -431,24 +438,28 @@ var app_router = new AppRouter;
 					<li id="edit-link" class="panel-link active"><a onclick="switchPanel('edit');" href="javascript:void(0);"><i class="glyphicon glyphicon-pencil"></i>Edit</a></li>
 					<li id="preview-link" class="panel-link"><a onclick="switchPanel('preview');" href="javascript:void(0);"><i class="glyphicon glyphicon-eye-open"></i>Preview</a></li>
 					<li id="help-link" class="panel-link"><a onclick="switchPanel('help');" href="javascript:void(0);"><i class="glyphicon glyphicon-question-sign"></i>Help</a></li>
-				</ul>  
+				</ul>
 				</div>
             </div>
-            <div class="row-fluid panel" id="edit-panel">
+            <div class="row-fluid displaypanel" id="edit-panel">
 				<div class="ace_editor_wrapper"><div id="editor">{{data}}</div></div>
 			</div>
-			<div class="row-fluid panel" id="preview-panel" style="display:none">
+			<div class="row-fluid displaypanel" id="preview-panel" style="display:none">
+				<div class="panel panel-default">
+				  <div class="panel-body" id="preview-panel-content">
 
+				  </div>
+				</div>
 			</div>
-			<div class="row-fluid panel" id="help-panel" style="display:none">
+			<div class="row-fluid displaypanel" id="help-panel" style="display:none">
 							<h2>Help with Markdown</h2>
 			<strong>Links</strong>
-			
+
 <pre>To link to another page in the Wiki:
 [A Link](#ALink)
- 
+
 To link to an external page:
-[Two10 Website](http://www.two10degrees.com) 
+[Two10 Website](http://www.two10degrees.com)
 </pre>
 
 			<strong>Formatting</strong>
@@ -459,7 +470,7 @@ To link to an external page:
 * Bullet
 * Points
 
-1. Numbered 
+1. Numbered
 1. List
 </pre>
 
@@ -475,7 +486,7 @@ function Hello(){
 
 		<script id="new-template" type="text/x-handlebars-template">
 
-       
+
             <div class="navbar navbar-default navbar-fixed-top">
             	<div class="container">
                 <div class="navbar-form navbar-left"><a class="btn btn-primary" href="javascript:void(0);" onclick="save('{{page}}');"><i class="glyphicon glyphicon-floppy-disk"></i>Create</a> <a href="javascript:void(0);" onclick="window.history.back()" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i>Cancel</a>
@@ -494,21 +505,26 @@ function Hello(){
 				</ul>
 				</div>
             </div>
-            <div class="row-fluid panel" id="edit-panel">
+            <div class="row-fluid displaypanel" id="edit-panel">
 				<div class="ace_editor_wrapper"><div id="editor">{{data}}</div></div>
 			</div>
-			<div class="row-fluid panel" id="preview-panel" style="display:none">
+			<div class="row-fluid displaypanel" id="preview-panel" style="display:none">
+				<div class="panel panel-default">
+				  <div class="panel-body" id="preview-panel-content">
+
+				  </div>
+				</div>
 
 			</div>
-			<div class="row-fluid panel" id="help-panel" style="display:none">
+			<div class="row-fluid displaypanel" id="help-panel" style="display:none">
 							<h2>Help with Markdown</h2>
 			<strong>Links</strong>
-			
+
 <pre>To link to another page in the Wiki:
 [A Link](#ALink)
- 
+
 To link to an external page:
-[Two10 Website](http://www.two10degrees.com) 
+[Two10 Website](http://www.two10degrees.com)
 </pre>
 
 			<strong>Formatting</strong>
@@ -519,7 +535,7 @@ To link to an external page:
 * Bullet
 * Points
 
-1. Numbered 
+1. Numbered
 1. List
 </pre>
 
@@ -552,7 +568,7 @@ function Hello(){
 				  	<li>
 				  		<a href="#snapshot/{{SnapshotArg}}/{{Name}}">{{clientModifiedAt}}</a>
 				  		{{#if Metadata.username}}
-							 by <a href="http://www.twitter.com/{{Metadata.twitter}}">{{Metadata.username}}</a>				  		
+							 by <a href="http://www.twitter.com/{{Metadata.twitter}}">{{Metadata.username}}</a>
 				  		{{/if}}
 				  	</li>
 				  {{/each}}
@@ -563,18 +579,18 @@ function Hello(){
 		<script id="snapshot-template" type="text/x-handlebars-template">
             <div class="navbar navbar-default navbar-fixed-top">
             <div class="container">
-                <div class="navbar-form navbar-left"><a href="#" class="btn btn-primary"><i class="glyphicon glyphicon-list"></i>All Pages</a> 
-                <a href="#page/{{page}}" class="btn btn-primary">Current Version</a> 
+                <div class="navbar-form navbar-left"><a href="#" class="btn btn-primary"><i class="glyphicon glyphicon-list"></i>All Pages</a>
+                <a href="#page/{{page}}" class="btn btn-primary">Current Version</a>
                 <a href="#history/{{page}}" class="btn btn-default">History</a>
                 {{#if canEdit}}
-                	<a href="javascript:void(0);" onclick="promote('{{page}}');" class="btn btn-danger">Promote to current version</a> 
+                	<a href="javascript:void(0);" onclick="promote('{{page}}');" class="btn btn-danger">Promote to current version</a>
                 {{/if}}
 		    	<strong>Historical version of {{page}}</strong></div>
 
                 {{#if user}}
 					<div class="navbar-form navbar-right name">{{user.name}}</div>
 				{{/if}}
-            </div>		
+            </div>
             </div>
 			<div class="row-fluid" id="md-container">
 			</div>
@@ -588,7 +604,7 @@ function Hello(){
 		        <h4 class="modal-title">Please enter a name for the page</h4>
 		      </div>
 		      <div class="modal-body">
-		        
+
 				<label class="sr-only" for="exampleInputEmail2">Page Name</label>
     			<input type="text" class="form-control" id="newPageName">
 
@@ -614,7 +630,7 @@ function Hello(){
             </div>
             <div class="row-fluid">
 				<p style="color:red">Sorry, you don't have permission to do this.</p>
-		  	</div>		
+		  	</div>
 		</script>
 
 
