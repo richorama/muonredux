@@ -201,6 +201,18 @@ $(document).ready(function() {
 		app_router.new(val);
 	});
 
+	$("#newPageForm").submit(function(e){
+		e.preventDefault();
+		var val = $("#newPageName").val();
+		if (!val){
+			return;
+		}
+		$("#newPageModal").modal("hide");
+		$("#newPageName").val("");
+		app_router.new(val);
+		return false;
+	});
+
 
 });
 
@@ -259,6 +271,7 @@ function deletePage(page, cb){
 
 function newPage(){
 	$("#newPageModal").modal('show')
+	$("#newPageName").focus();
 }
 
 function switchPanel(panel){
@@ -682,6 +695,7 @@ function Hello(){
 		</script>
 
 		<div class="modal fade" id="newPageModal">
+		  <form id="newPageForm">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -696,10 +710,11 @@ function Hello(){
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-		        <button type="button" class="btn btn-default" id="newPageModalOK">OK</button>
+		        <input type="button" class="btn btn-default" id="newPageModalOK" value="OK"/>
 		      </div>
 		    </div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->
+	  		</form>
 		</div><!-- /.modal -->
 
 		<script id="nopermission-template" type="text/x-handlebars-template">
